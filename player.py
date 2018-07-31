@@ -21,9 +21,15 @@ class Player:
         print("Potions  : {0:10d}".format(self.potions))
         print("Luck     : {0:10d}".format(self.luck))
 
+    def is_int(self, s):
+        try:
+            int(s)
+            return True
+        except ValueError:
+            return False
 
     def attack(self, m):
-        m.hp -= self.strength + self.weapon_power
+        m.remaining_hp -= self.strength + self.weapon_power
 
     def drink_potion(self, num):
         if self.potions >= num:
@@ -36,10 +42,10 @@ class Player:
             return False
 
     def get_experience(self, m):
-        diff = (self.hp + self.strength + self.weapon_power) - (m.hp + m.power)
+        diff = (m.hp / (self.strength + self.weapon_power)) - (self.hp / (1 if m.power == 0 else m.power))
         diff_to_add = abs(int(rd.gauss(0, diff)))
         if diff > 0:
-            exp = (25 - diff_to_add)
+            exp = (25 + diff_to_add)
         elif diff < 0:
             exp = (25 - diff_to_add)
         else:
@@ -63,6 +69,10 @@ class Player:
         print("Your level increased to ", self.level)
         while True:
             i = input("Which do you want to increase more? Hp(1) Strength(2) Luck(3): ")
+            if self.is_int(i):
+                i = int(i)
+            else:
+                continue
             if i == 1:
                 abs(int(rd.gauss(0, 50)))
                 break

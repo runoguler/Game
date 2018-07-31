@@ -26,9 +26,9 @@ def monster_fight(p):
         else:
             continue
         if i == 1:
-            last_hp = m.hp
+            last_hp = m.remaining_hp
             p.attack(m)
-            print("You attacked! Monster's hp fell from ", last_hp, " to ", m.hp)
+            print("You attacked! Monster's hp fell from ", last_hp, " to ", m.remaining_hp)
         elif i == 2:
             t = False
             j = 0
@@ -45,7 +45,7 @@ def monster_fight(p):
             print("You drank ", j, " potions! Your new hp is ", p.remaining_hp)
         elif i == 3:
             dev = p.luck - p.level
-            if dev != 0 and dev >= abs(int(rd.gauss(0, dev))):
+            if dev < abs(int(rd.gauss(0, dev))):
                 print("You were able to run away!")
                 break
             else:
@@ -56,7 +56,7 @@ def monster_fight(p):
         else:
             continue
 
-        if (m.hp <= 0):
+        if (m.remaining_hp <= 0):
             win = 1
             break
 
